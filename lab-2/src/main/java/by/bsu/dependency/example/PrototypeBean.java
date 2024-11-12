@@ -1,21 +1,20 @@
 package by.bsu.dependency.example;
 
 import by.bsu.dependency.annotation.Bean;
+import by.bsu.dependency.annotation.BeanScope;
 import by.bsu.dependency.annotation.Inject;
 import by.bsu.dependency.annotation.PostConstruct;
 
-@Bean(name = "otherBean")
-public class OtherBean {
-
+@Bean(name = "prototypeBean", scope = BeanScope.PROTOTYPE)
+public class PrototypeBean {
+    public PrototypeBean() {
+        System.out.println("PrototypeBean is created");
+    }
     @Inject
     private FirstBean firstBean;
 
-    public FirstBean getFirstBean() {
-        return firstBean;
-    }
-
     void doSomething() {
-        System.out.println("Hi, I'm other bean");
+        System.out.println("Hi, I'm Prototype bean");
     }
 
     void doSomethingWithFirst() {
@@ -25,7 +24,7 @@ public class OtherBean {
 
     @PostConstruct
     void postConstruct() {
-        System.out.println("PostConstruct bean running, dependency on firstBean");
+        System.out.println("PostConstruct bean running on Prototype, dependency on firstBean");
         firstBean.printSomething();
     }
 }

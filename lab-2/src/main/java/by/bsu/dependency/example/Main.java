@@ -15,6 +15,7 @@ public class Main {
         ApplicationContext applicationContext = new AutoScanApplicationContext("by.bsu.dependency.example");
         applicationContext.start();
 
+
         FirstBean firstBean = (FirstBean) applicationContext.getBean("firstBean");
         OtherBean otherBean = (OtherBean) applicationContext.getBean("otherBean");
 
