@@ -8,12 +8,16 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import by.bsu.dependency.annotation.Bean;
+import by.bsu.dependency.annotation.Inject;
+import by.bsu.dependency.exceptions.ApplicationContextNotStartedException;
+import by.bsu.dependency.exceptions.NoSuchBeanDefinitionException;
 
 
 public class HardCodedSingletonApplicationContext extends AbstractApplicationContext {
 
     private final Map<String, Class<?>> beanDefinitions;
     private final Map<String, Object> beans = new HashMap<>();
+    private ContextStatus status = ContextStatus.NOT_STARTED;
 
     /**
      * ! Класс существует только для базового примера !
@@ -39,11 +43,12 @@ public class HardCodedSingletonApplicationContext extends AbstractApplicationCon
     @Override
     public void start() {
         beanDefinitions.forEach((beanName, beanClass) -> beans.put(beanName, instantiateBean(beanClass)));
+        status = ContextStatus.STARTED;
     }
 
     @Override
     public boolean isRunning() {
-        throw new IllegalStateException("not implemented");
+        return status.equals(ContextStatus.STARTED);
     }
 
     /**
@@ -51,6 +56,9 @@ public class HardCodedSingletonApplicationContext extends AbstractApplicationCon
      */
     @Override
     public boolean containsBean(String name) {
+        if (status.equals(ContextStatus.NOT_STARTED)) {
+            throw new ApplicationContextNotStartedException("ApplicationContext is not started");
+        }
         return beans.containsKey(name);
     }
 
@@ -59,6 +67,12 @@ public class HardCodedSingletonApplicationContext extends AbstractApplicationCon
      */
     @Override
     public Object getBean(String name) {
+        if (status.equals(ContextStatus.NOT_STARTED)) {
+            throw new ApplicationContextNotStartedException("ApplicationContext is not started");
+        }
+        if (!beans.containsKey(name)) {
+            throw new NoSuchBeanDefinitionException(name);
+        }
         return beans.get(name);
     }
 
@@ -69,11 +83,17 @@ public class HardCodedSingletonApplicationContext extends AbstractApplicationCon
 
     @Override
     public boolean isPrototype(String name) {
+        if (!beanDefinitions.containsKey(name)) {
+            throw new NoSuchBeanDefinitionException(name);
+        }
         return false;
     }
 
     @Override
     public boolean isSingleton(String name) {
+        if (!beanDefinitions.containsKey(name)) {
+            throw new NoSuchBeanDefinitionException(name);
+        }
         return true;
     }
 
