@@ -2,12 +2,15 @@ package by.bsu.dependency.context;
 
 import by.bsu.dependency.example.FirstBean;
 import by.bsu.dependency.example.OtherBean;
+import by.bsu.dependency.example.PrototypeBean;
+import by.bsu.dependency.example.TestBean;
 import by.bsu.dependency.exceptions.ApplicationContextNotStartedException;
 import by.bsu.dependency.exceptions.NoSuchBeanDefinitionException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertDoesNotThrow;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class SimpleApplicationContextTest {
@@ -16,7 +19,8 @@ class SimpleApplicationContextTest {
 
     @BeforeEach
     void init() {
-        applicationContext = new SimpleApplicationContext(FirstBean.class, OtherBean.class);
+        applicationContext = new SimpleApplicationContext(FirstBean.class, OtherBean.class,
+                PrototypeBean.class, TestBean.class);
     }
 
     @Test
@@ -95,6 +99,14 @@ class SimpleApplicationContextTest {
                 NoSuchBeanDefinitionException.class,
                 () -> applicationContext.isPrototype("randomName")
         );
+    }
+
+    @Test
+    void testInjection() {
+        applicationContext.start();
+        assertDoesNotThrow(() -> ((OtherBean) applicationContext.getBean("otherBean")).doSomethingWithFirst());
+        assertThat(applicationContext.getBean("firstBean")).isNotNull().isInstanceOf(FirstBean.class);
+        assertThat(applicationContext.getBean("otherBean")).isNotNull().isInstanceOf(OtherBean.class);
     }
 }
 

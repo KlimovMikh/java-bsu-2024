@@ -18,7 +18,7 @@ public class OtherBean {
         System.out.println("Hi, I'm other bean");
     }
 
-    void doSomethingWithFirst() {
+    public void doSomethingWithFirst() {
         System.out.println("Trying to shake first bean...");
         firstBean.doSomething();
     }

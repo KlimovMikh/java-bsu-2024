@@ -8,11 +8,7 @@ import by.bsu.dependency.context.SimpleApplicationContext;
 public class Main {
 
     public static void main(String[] args) {
-//        ApplicationContext applicationContext = new SimpleApplicationContext(
-//                FirstBean.class, OtherBean.class
-//        );
-//        by.bsu.dependency.context for scan
-        ApplicationContext applicationContext = new AutoScanApplicationContext("by.bsu.dependency.example");
+        ApplicationContext applicationContext = new HardCodedSingletonApplicationContext(FirstBean.class, OtherBean.class);
         applicationContext.start();
 
 
@@ -23,6 +19,10 @@ public class Main {
         otherBean.doSomething();
 
         // Метод падает, так как в классе HardCodedSingletonApplicationContext не реализовано внедрение зависимостей
-        otherBean.doSomethingWithFirst();
+        try {
+            otherBean.doSomethingWithFirst();
+        } catch (Exception e) {
+            System.out.println("Exception produced because this context does not inject dependencies");
+        }
     }
 }
