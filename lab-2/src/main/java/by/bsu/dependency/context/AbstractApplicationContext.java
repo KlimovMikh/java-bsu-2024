@@ -54,12 +54,12 @@ public abstract class AbstractApplicationContext implements ApplicationContext {
             if (!scopes.get(entry.getKey()).equals(BeanScope.SINGLETON)) {
                 continue;
             }
-            inject(entry.getKey(), entry.getValue());
+            inject(entry.getValue());
             postConstruct(entry.getValue());
         }
     }
 
-    protected void inject(String name, Object bean) {
+    protected void inject(Object bean) {
         for(var field : bean.getClass().getDeclaredFields()) {
             if (field.isAnnotationPresent(Inject.class)) {
                 field.setAccessible(true);
@@ -120,7 +120,7 @@ public abstract class AbstractApplicationContext implements ApplicationContext {
             return beans.get(name);
         } else {
             var bean = instantiateBean(beanDefinitions.get(name));
-            inject(name, bean);
+            inject(bean);
             postConstruct(bean);
             return bean;
         }

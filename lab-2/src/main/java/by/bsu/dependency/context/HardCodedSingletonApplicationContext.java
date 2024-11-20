@@ -1,6 +1,5 @@
 package by.bsu.dependency.context;
 
-import java.lang.reflect.InvocationTargetException;
 import java.util.Arrays;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -38,7 +37,7 @@ public class HardCodedSingletonApplicationContext extends AbstractApplicationCon
         status = ContextStatus.STARTED;
     }
 
-//    same methods as in AbstractApplicationContext
+//    same methods implemented in AbstractApplicationContext
 
 //    @Override
 //    public boolean isRunning() {

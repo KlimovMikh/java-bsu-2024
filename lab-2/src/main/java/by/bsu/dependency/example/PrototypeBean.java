@@ -10,6 +10,8 @@ public class PrototypeBean {
     public PrototypeBean() {
         System.out.println("PrototypeBean is created");
     }
+
+    @SuppressWarnings("unused")
     @Inject
     private FirstBean firstBean;
 
@@ -17,11 +19,13 @@ public class PrototypeBean {
         System.out.println("Hi, I'm Prototype bean");
     }
 
+    @SuppressWarnings("unused")
     void doSomethingWithFirst() {
         System.out.println("Trying to shake first bean...");
         firstBean.doSomething();
     }
 
+    @SuppressWarnings("unused")
     @PostConstruct
     void postConstruct() {
         System.out.println("PostConstruct bean running on Prototype, dependency on firstBean");

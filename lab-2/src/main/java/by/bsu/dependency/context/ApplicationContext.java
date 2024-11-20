@@ -1,5 +1,8 @@
 package by.bsu.dependency.context;
 
+import by.bsu.dependency.exceptions.NoSuchBeanDefinitionException;
+import by.bsu.dependency.exceptions.ApplicationContextNotStartedException;
+
 public interface ApplicationContext {
 
     /**

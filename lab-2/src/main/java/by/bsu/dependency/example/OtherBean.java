@@ -7,6 +7,7 @@ import by.bsu.dependency.annotation.PostConstruct;
 @Bean(name = "otherBean")
 public class OtherBean {
 
+    @SuppressWarnings("unused")
     @Inject
     private FirstBean firstBean;
 
@@ -23,6 +24,7 @@ public class OtherBean {
         firstBean.doSomething();
     }
 
+    @SuppressWarnings("unused")
     @PostConstruct
     void postConstruct() {
         System.out.println("PostConstruct bean running, dependency on firstBean");
